@@ -3,12 +3,12 @@ package ba.unsa.etf.nrs;
 import java.util.ArrayList;
 
 public class Grad {
+    ArrayList<Znamenitost> znamenitosti;
     private int id;
     private String naziv;
     private int brojStanovnika;
     private Drzava drzava;
     private int postanskiBroj;
-    ArrayList<Znamenitost> znamenitosti;
 
     public Grad(int id, String naziv, int brojStanovnika, Drzava drzava, int postanskiBroj) {
         this.id = id;
