@@ -22,7 +22,6 @@ public class GradController {
     public ChoiceBox<Drzava> choiceDrzava;
     public ObservableList<Drzava> listDrzave;
     private Grad grad;
-    private Thread thread;
 
     public GradController(Grad grad, ArrayList<Drzava> drzave) {
         this.grad = grad;
@@ -81,8 +80,14 @@ public class GradController {
             fieldBrojStanovnika.getStyleClass().removeAll("poljeNijeIspravno");
             fieldBrojStanovnika.getStyleClass().add("poljeIspravno");
         }
+        if (fieldPostanskiBroj.getText().isEmpty()) {
+            fieldPostanskiBroj.getStyleClass().removeAll("poljeIspravno");
+            fieldPostanskiBroj.getStyleClass().add("poljeNijeIspravno");
+            sveOk = false;
+        }
         if (!sveOk) return;
-        thread = new Thread(() -> {
+        // ...
+        Thread thread = new Thread(() -> {
             try {
                 int postanskiBroj = 0;
                 try {
@@ -104,7 +109,7 @@ public class GradController {
                     grad.setNaziv(fieldNaziv.getText());
                     grad.setBrojStanovnika(Integer.parseInt(fieldBrojStanovnika.getText()));
                     grad.setDrzava(choiceDrzava.getValue());
-                    grad.setPostanskiBroj(postanskiBroj);
+                    grad.setPostanskiBroj(Integer.parseInt(fieldPostanskiBroj.getText()));
                     Platform.runLater(() -> {
                         Stage stage = (Stage) fieldNaziv.getScene().getWindow();
                         stage.close();
