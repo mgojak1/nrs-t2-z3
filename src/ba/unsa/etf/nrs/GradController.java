@@ -5,7 +5,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -21,11 +25,17 @@ public class GradController {
     public TextField fieldPostanskiBroj;
     public ChoiceBox<Drzava> choiceDrzava;
     public ObservableList<Drzava> listDrzave;
+    public ObservableList<Znamenitost> listZnamenitosti;
+    public ListView<Znamenitost> listViewZnamenitosti;
     private Grad grad;
+    private GeografijaDAO dao;
 
     public GradController(Grad grad, ArrayList<Drzava> drzave) {
         this.grad = grad;
         listDrzave = FXCollections.observableArrayList(drzave);
+        if (grad != null) listZnamenitosti = FXCollections.observableArrayList(grad.getZnamenitosti());
+        else listZnamenitosti = FXCollections.observableArrayList();
+        dao = GeografijaDAO.getInstance();
     }
 
     @FXML
@@ -35,14 +45,14 @@ public class GradController {
             fieldNaziv.setText(grad.getNaziv());
             fieldBrojStanovnika.setText(Integer.toString(grad.getBrojStanovnika()));
             fieldPostanskiBroj.setText(Integer.toString(grad.getPostanskiBroj()));
-            // choiceDrzava.getSelectionModel().select(grad.getDrzava());
-            // ovo ne radi jer grad.getDrzava() nije identički jednak objekat kao član listDrzave
             for (Drzava drzava : listDrzave)
                 if (drzava.getId() == grad.getDrzava().getId())
                     choiceDrzava.getSelectionModel().select(drzava);
         } else {
             choiceDrzava.getSelectionModel().selectFirst();
         }
+
+        listViewZnamenitosti.setItems(listZnamenitosti);
     }
 
     public Grad getGrad() {
@@ -120,5 +130,35 @@ public class GradController {
             }
         });
         thread.start();
+    }
+
+    public void dodajZnamenitost() {
+        if (grad == null) return;
+        Stage stage = new Stage();
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/znamenitosti.fxml"));
+            ZnamenitostController znamenitostController = new ZnamenitostController(grad);
+            loader.setController(znamenitostController);
+            root = loader.load();
+            stage.setTitle("Znamenitost");
+            stage.setScene(new Scene(root));
+            stage.setResizable(true);
+            stage.show();
+
+            stage.setOnHiding(event -> {
+                Znamenitost znamenitost = znamenitostController.getZnanemitost();
+                if (znamenitost != null) {
+                    dao.dodajZnamenitost(znamenitost);
+                    grad.getZnamenitosti().add(znamenitost);
+                    listZnamenitosti.setAll(grad.getZnamenitosti());
+                    listViewZnamenitosti.refresh();
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
