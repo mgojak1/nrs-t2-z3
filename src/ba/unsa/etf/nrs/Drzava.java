@@ -39,5 +39,7 @@ public class Drzava {
     }
 
     @Override
-    public String toString() { return naziv; }
+    public String toString() {
+        return naziv;
+    }
 }

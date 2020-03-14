@@ -24,10 +24,10 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class GlavnaController {
 
     public TableView<Grad> tableViewGradovi;
-    public TableColumn colGradId;
-    public TableColumn colGradNaziv;
-    public TableColumn colGradStanovnika;
-    public TableColumn<Grad,String> colGradDrzava;
+    public TableColumn<Grad, Integer> colGradId;
+    public TableColumn<Grad, String> colGradNaziv;
+    public TableColumn<Grad, Integer> colGradStanovnika;
+    public TableColumn<Grad, String> colGradDrzava;
     private GeografijaDAO dao;
     private ObservableList<Grad> listGradovi;
 
@@ -39,15 +39,15 @@ public class GlavnaController {
     @FXML
     public void initialize() {
         tableViewGradovi.setItems(listGradovi);
-        colGradId.setCellValueFactory(new PropertyValueFactory("id"));
-        colGradNaziv.setCellValueFactory(new PropertyValueFactory("naziv"));
-        colGradStanovnika.setCellValueFactory(new PropertyValueFactory("brojStanovnika"));
+        colGradId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colGradNaziv.setCellValueFactory(new PropertyValueFactory<>("naziv"));
+        colGradStanovnika.setCellValueFactory(new PropertyValueFactory<>("brojStanovnika"));
         colGradDrzava.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDrzava().getNaziv()));
     }
 
     public void actionDodajGrad(ActionEvent actionEvent) {
         Stage stage = new Stage();
-        Parent root = null;
+        Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
             GradController gradController = new GradController(null, dao.drzave());
@@ -58,13 +58,13 @@ public class GlavnaController {
             stage.setResizable(true);
             stage.show();
 
-            stage.setOnHiding( event -> {
+            stage.setOnHiding(event -> {
                 Grad grad = gradController.getGrad();
                 if (grad != null) {
                     dao.dodajGrad(grad);
                     listGradovi.setAll(dao.gradovi());
                 }
-            } );
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,7 +73,7 @@ public class GlavnaController {
 
     public void actionDodajDrzavu(ActionEvent actionEvent) {
         Stage stage = new Stage();
-        Parent root = null;
+        Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/drzava.fxml"));
             DrzavaController drzavaController = new DrzavaController(null, dao.gradovi());
@@ -84,13 +84,13 @@ public class GlavnaController {
             stage.setResizable(true);
             stage.show();
 
-            stage.setOnHiding( event -> {
+            stage.setOnHiding(event -> {
                 Drzava drzava = drzavaController.getDrzava();
                 if (drzava != null) {
                     dao.dodajDrzavu(drzava);
                     listGradovi.setAll(dao.gradovi());
                 }
-            } );
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,7 +101,7 @@ public class GlavnaController {
         if (grad == null) return;
 
         Stage stage = new Stage();
-        Parent root = null;
+        Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
             GradController gradController = new GradController(grad, dao.drzave());
@@ -112,13 +112,13 @@ public class GlavnaController {
             stage.setResizable(true);
             stage.show();
 
-            stage.setOnHiding( event -> {
+            stage.setOnHiding(event -> {
                 Grad noviGrad = gradController.getGrad();
                 if (noviGrad != null) {
                     dao.izmijeniGrad(noviGrad);
                     listGradovi.setAll(dao.gradovi());
                 }
-            } );
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,12 +130,12 @@ public class GlavnaController {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Potvrda brisanja");
-        alert.setHeaderText("Brisanje grada "+grad.getNaziv());
-        alert.setContentText("Da li ste sigurni da želite obrisati grad " +grad.getNaziv()+"?");
+        alert.setHeaderText("Brisanje grada " + grad.getNaziv());
+        alert.setContentText("Da li ste sigurni da želite obrisati grad " + grad.getNaziv() + "?");
         alert.setResizable(true);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             dao.obrisiGrad(grad);
             listGradovi.setAll(dao.gradovi());
         }
