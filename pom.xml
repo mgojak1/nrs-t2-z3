@@ -8,7 +8,13 @@
     <artifactId>nrs-t1-z3</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <build>
+        <resources>
+            <resource>
+                <directory>resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -16,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ba.unsa.etf.rpr.predavanje23.Main</mainClass>
+                            <mainClass>ba.unsa.etf.nrs.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

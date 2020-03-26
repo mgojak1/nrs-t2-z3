@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class GradoviReport extends JFrame {
     public void showReport(Connection conn) throws JRException {
         String reportSrcFile = getClass().getResource("/reports/gradovi.jrxml").getFile();
-        String reportsDir = getClass().getResource("/reports/").getFile();
+        String reportsDir = getClass().getResource("/reports").getFile();
         JasperReport jasperReport = JasperCompileManager.compileReport(reportSrcFile);
         // Fields for resources path
         HashMap<String, Object> parameters = new HashMap<String, Object>();
