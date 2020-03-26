@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class GradController {
@@ -137,11 +138,13 @@ public class GradController {
         Stage stage = new Stage();
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/znamenitosti.fxml"));
+            ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+            FXMLLoader loader = new FXMLLoader( getClass().getResource(
+                    "/fxml/znamenitosti.fxml" ), bundle);
             ZnamenitostController znamenitostController = new ZnamenitostController(grad);
             loader.setController(znamenitostController);
             root = loader.load();
-            stage.setTitle("Znamenitost");
+            stage.setTitle(bundle.getString("znamenitost"));
             stage.setScene(new Scene(root));
             stage.setResizable(true);
             stage.show();

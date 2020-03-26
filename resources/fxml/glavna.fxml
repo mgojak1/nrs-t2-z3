@@ -9,9 +9,9 @@
         <TableView fx:id="tableViewGradovi" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <columns>
                 <TableColumn fx:id="colGradId" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="colGradNaziv" prefWidth="100.0" text="Naziv" />
-                <TableColumn fx:id="colGradStanovnika" prefWidth="90.0" text="Stanovnika" />
-                <TableColumn fx:id="colGradDrzava" prefWidth="185.0" text="Država" />
+                <TableColumn fx:id="colGradNaziv" prefWidth="100.0" text="%nazivT" />
+                <TableColumn fx:id="colGradStanovnika" prefWidth="90.0" text="%stanovnika" />
+                <TableColumn fx:id="colGradDrzava" prefWidth="185.0" text="%drzavaT" />
             </columns>
         </TableView>
     </center>
@@ -20,11 +20,12 @@
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
-            <Button fx:id="btnDodajGrad" mnemonicParsing="false" onAction="#actionDodajGrad" prefWidth="Infinity" text="Dodaj grad" />
-            <Button fx:id="btnDodajDrzavu" mnemonicParsing="false" onAction="#actionDodajDrzavu" prefWidth="Infinity" text="Dodaj državu" />
-            <Button fx:id="btnIzmijeniGrad" mnemonicParsing="false" onAction="#actionIzmijeniGrad" prefWidth="Infinity" text="Izmijeni grad" />
-            <Button fx:id="btnObrisiGrad" mnemonicParsing="false" onAction="#actionObrisiGrad" prefWidth="Infinity" text="Obriši grad" />
-         <Button fx:id="btnStampa" layoutX="15.0" layoutY="108.0" mnemonicParsing="false" onAction="#prikaziIzvjestaj" prefWidth="Infinity" text="Štampa" />
+            <Button fx:id="btnDodajGrad" mnemonicParsing="false" onAction="#actionDodajGrad" prefWidth="Infinity" text="%dodaj_grad" />
+            <Button fx:id="btnDodajDrzavu" mnemonicParsing="false" onAction="#actionDodajDrzavu" prefWidth="Infinity" text="%dodaj_drzavu" />
+            <Button fx:id="btnIzmijeniGrad" mnemonicParsing="false" onAction="#actionIzmijeniGrad" prefWidth="Infinity" text="%izmijeni_grad" />
+            <Button fx:id="btnObrisiGrad" mnemonicParsing="false" onAction="#actionObrisiGrad" prefWidth="Infinity" text="%obrisi_grad" />
+         <Button fx:id="btnStampa" layoutX="15.0" layoutY="108.0" mnemonicParsing="false" onAction="#prikaziIzvjestaj" prefWidth="Infinity" text="%stampa" />
+         <Button fx:id="btnJezik" layoutX="15.0" layoutY="139.0" mnemonicParsing="false" onAction="#izaberiJezik" prefWidth="Infinity" text="%jezik" />
         </VBox>
     </right>
 </BorderPane>

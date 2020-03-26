@@ -8,17 +8,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.JRException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -31,7 +30,7 @@ public class GlavnaController {
     public TableColumn<Grad, String> colGradDrzava;
     private GeografijaDAO dao;
     private ObservableList<Grad> listGradovi;
-
+    private ResourceBundle bundle;
     public GlavnaController() {
         dao = GeografijaDAO.getInstance();
         listGradovi = FXCollections.observableArrayList(dao.gradovi());
@@ -39,6 +38,7 @@ public class GlavnaController {
 
     @FXML
     public void initialize() {
+        bundle = ResourceBundle.getBundle("Translation");
         tableViewGradovi.setItems(listGradovi);
         colGradId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colGradNaziv.setCellValueFactory(new PropertyValueFactory<>("naziv"));
@@ -50,11 +50,12 @@ public class GlavnaController {
         Stage stage = new Stage();
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
+            FXMLLoader loader = new FXMLLoader( getClass().getResource(
+                    "/fxml/grad.fxml" ), bundle);
             GradController gradController = new GradController(null, dao.drzave());
             loader.setController(gradController);
             root = loader.load();
-            stage.setTitle("Grad");
+            stage.setTitle(bundle.getString("grad"));
             stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
             stage.setResizable(true);
             stage.show();
@@ -76,11 +77,12 @@ public class GlavnaController {
         Stage stage = new Stage();
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/drzava.fxml"));
+            FXMLLoader loader = new FXMLLoader( getClass().getResource(
+                    "/fxml/drzava.fxml" ), bundle);
             DrzavaController drzavaController = new DrzavaController(null, dao.gradovi());
             loader.setController(drzavaController);
             root = loader.load();
-            stage.setTitle("Država");
+            stage.setTitle(bundle.getString("drzavaT"));
             stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
             stage.setResizable(true);
             stage.show();
@@ -104,11 +106,12 @@ public class GlavnaController {
         Stage stage = new Stage();
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
+            FXMLLoader loader = new FXMLLoader( getClass().getResource(
+                    "/fxml/grad.fxml" ), bundle);
             GradController gradController = new GradController(grad, dao.drzave());
             loader.setController(gradController);
             root = loader.load();
-            stage.setTitle("Grad");
+            stage.setTitle(bundle.getString("grad"));
             stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
             stage.setResizable(true);
             stage.show();
@@ -130,9 +133,9 @@ public class GlavnaController {
         if (grad == null) return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Potvrda brisanja");
-        alert.setHeaderText("Brisanje grada " + grad.getNaziv());
-        alert.setContentText("Da li ste sigurni da želite obrisati grad " + grad.getNaziv() + "?");
+        alert.setTitle(bundle.getString("potvrda_brisanja"));
+        alert.setHeaderText(bundle.getString("brisanje_grada") + grad.getNaziv());
+        alert.setContentText(bundle.getString("da_li_ste_sigurni") + grad.getNaziv() + "?");
         alert.setResizable(true);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -156,6 +159,36 @@ public class GlavnaController {
         } catch (JRException e1) {
             e1.printStackTrace();
         }
+    }
+
+    public void izaberiJezik(){
+        String[] opcije = {bundle.getString("engleski"), bundle.getString("bosanski")};
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<>(opcije[1], opcije);
+        choiceDialog.setTitle(bundle.getString( "izaberi_jezik"));
+        Optional<String> result = choiceDialog.showAndWait();
+        if(result.get().equals(bundle.getString("engleski"))) {
+            Locale.setDefault(new Locale("en", "US"));
+            bundle = ResourceBundle.getBundle("Translation");
+        } else if(result.get().equals(bundle.getString("bosanski"))) {
+            Locale.setDefault(new Locale("bs", "BA"));
+            bundle = ResourceBundle.getBundle("Translation");
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader( getClass().getResource(
+                    "/fxml/glavna.fxml" ), bundle);
+            GlavnaController ctrl = new GlavnaController();
+            loader.setController(ctrl);
+            Parent root = loader.load();
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle(bundle.getString("gradovi_svijeta"));
+            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.show();
+            Stage stage = (Stage) tableViewGradovi.getScene().getWindow();
+            stage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

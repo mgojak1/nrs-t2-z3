@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -44,11 +45,13 @@ public class ZnamenitostController {
         Stage stage = new Stage();
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pretraga.fxml"));
+            ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+            FXMLLoader loader = new FXMLLoader( getClass().getResource(
+                    "/fxml/pretraga.fxml" ), bundle);
             PretragaController pretragaController = new PretragaController();
             loader.setController(pretragaController);
             root = loader.load();
-            stage.setTitle("Traži");
+            stage.setTitle(bundle.getString("trazi"));
             stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
             stage.setResizable(true);
             stage.show();
